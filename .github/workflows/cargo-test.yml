@@ -1,0 +1,33 @@
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_NET_GIT_FETCH_WITH_CLI: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        rust:
+          - 1.81.0  # MSRV
+          - stable
+          - nightly
+        features:
+          - ""
+          - "serde"
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ matrix.rust }}
+    - uses: Swatinem/rust-cache@v2
+
+    - name: Run tests (debug)
+      run: cargo test --no-default-features --features "${{ matrix.features }}" --verbose
+
+    - name: Run tests (release)
+      run: cargo test --no-default-features --features "${{ matrix.features }}" --verbose --release

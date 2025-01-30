@@ -1,0 +1,18 @@
+[package]
+name = "oci-imgref"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.81.0"
+
+[features]
+serde = ["dep:serde", "oci-digest/serde"]
+
+[dependencies]
+oci-digest = { git = "https://github.com/pyx-cvm/oci-digest", branch = "main" }
+
+serde = { version = "1.0", optional = true, default-features = false, features = ["derive", "alloc"] }
+displaydoc = "0.2"
+thiserror = "2.0"
+
+[dev-dependencies]
+rstest = { version = "0.17.0", default-features = false }
